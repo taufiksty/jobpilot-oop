@@ -11,14 +11,12 @@ public class User extends BaseModel {
         super();
         this.name = name;
         this.password = password;
-        this.lastLoginAt = LocalDateTime.now();
     }
 
     public User(int id, String name, String password) {
         super(id);
         this.name = name;
         this.password = password;
-        this.lastLoginAt = LocalDateTime.now();
     }
 
     public String toString() {
