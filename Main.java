@@ -2,6 +2,10 @@ import java.util.Scanner;
 
 import controller.AuthController;
 import controller.JobApplicationController;
+import repository.CompanyRepository;
+import repository.JobApplicationRepository;
+import repository.UserEmailRepository;
+import repository.UserRepository;
 import repository.inmemory.CompanyRepositoryInMemoryImpl;
 import repository.inmemory.JobApplicationRepositoryInMemoryImpl;
 import repository.inmemory.UserEmailRepositoryInMemoryImpl;
@@ -16,10 +20,10 @@ public class Main {
 
     private static final Scanner scanner = new Scanner(System.in);
 
-    private static final UserRepositoryInMemoryImpl userRepository = new UserRepositoryInMemoryImpl();
-    private static final UserEmailRepositoryInMemoryImpl userEmailRepository = new UserEmailRepositoryInMemoryImpl();
-    private static final CompanyRepositoryInMemoryImpl companyRepository = new CompanyRepositoryInMemoryImpl();
-    private static final JobApplicationRepositoryInMemoryImpl jobApplicationRepository = new JobApplicationRepositoryInMemoryImpl();
+    private static final UserRepository userRepository = new UserRepositoryInMemoryImpl();
+    private static final UserEmailRepository userEmailRepository = new UserEmailRepositoryInMemoryImpl();
+    private static final CompanyRepository companyRepository = new CompanyRepositoryInMemoryImpl();
+    private static final JobApplicationRepository jobApplicationRepository = new JobApplicationRepositoryInMemoryImpl();
 
     private static final AuthService authService = new AuthService(userRepository, userEmailRepository);
     private static final JobApplicationService jobApplicationService = new JobApplicationService(
