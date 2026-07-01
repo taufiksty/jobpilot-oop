@@ -35,7 +35,7 @@ public class JobApplicationService {
                 status,
                 null, // jobUrl
                 source,
-                LocalDateTime.now(), // appliedDateTime
+                status.equals(JobApplicationStatus.APPLIED) ? LocalDateTime.now() : null, // appliedDateTime
                 null, // importanDateTime
                 null // importantNote
         );
