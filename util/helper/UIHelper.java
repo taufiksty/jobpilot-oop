@@ -50,7 +50,7 @@ public class UIHelper {
         System.out.println("  5. Edit My Application");
         System.out.println("  6. Delete My Application");
 
-        System.out.println("\n  0. Keluar Aplikasi");
+        System.out.println("\n  0. Quit Application");
         ConsoleHelper.printDivider();
     }
 }
