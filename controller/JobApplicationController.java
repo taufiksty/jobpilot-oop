@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Scanner;
 
 import dto.JobApplicationDto;
+import dto.request.AddJobApplicationRequestDto;
+import dto.request.UpdateJobApplicationRequestDto;
 import enums.JobApplicationStatus;
 import model.JobApplication;
 import service.JobApplicationService;
@@ -43,17 +45,19 @@ public class JobApplicationController {
         JobApplicationStatus status = selectStatus();
         String source = selectSource();
 
-        int userId = SessionContext.getCurrentUser().getUser().getId();
+        String userId = SessionContext.getCurrentUser().getUser().getId();
 
-        JobApplicationDto jobApplication = jobApplicationService.addJobApplication(userId, company, position, status,
-                source);
+        AddJobApplicationRequestDto addJobApplicationRequest = new AddJobApplicationRequestDto(userId, company,
+                position, status, source);
+
+        JobApplicationDto jobApplication = jobApplicationService.addJobApplication(addJobApplicationRequest);
         ConsoleHelper.success("Job Application added successfully for "
                 + jobApplication.getJobApplication().getPosition() + " at " + jobApplication.getCompany().getName());
     }
 
     public void handleViewMyJobApplications() {
         ConsoleHelper.printHeader("MY JOB APPLICATIONS");
-        int userId = SessionContext.getCurrentUser().getUser().getId();
+        String userId = SessionContext.getCurrentUser().getUser().getId();
         List<JobApplicationDto> jobApplicationList = jobApplicationService.getMyJobApplications(userId);
 
         if (jobApplicationList.isEmpty()) {
@@ -67,7 +71,8 @@ public class JobApplicationController {
 
     public void handleUpdateJobApplication() {
         ConsoleHelper.printHeader("UPDATE JOB APPLICATION");
-        int id = promptInt("Enter Job Application ID: ");
+        System.out.print("Enter Job Application ID: ");
+        String id = scanner.nextLine().trim();
         JobApplicationDto dto;
         try {
             dto = jobApplicationService.getJobApplicationDetail(id);
@@ -80,7 +85,7 @@ public class JobApplicationController {
         ConsoleHelper.printDivider();
         ConsoleHelper.info("Leave blank to keep current value.");
 
-        model.JobApplication current = dto.getJobApplication();
+        JobApplication current = dto.getJobApplication();
 
         System.out.print("Company [" + dto.getCompany().getName() + "]: ");
         String company = scanner.nextLine().trim();
@@ -94,13 +99,10 @@ public class JobApplicationController {
 
         String source = updateSource(current.getSource());
 
-        JobApplicationDto updated = jobApplicationService.updateJobApplication(
-                id,
-                current.getUserId(),
-                company,
-                position,
-                status,
-                source);
+        UpdateJobApplicationRequestDto updateJobApplicationRequest = new UpdateJobApplicationRequestDto(id,
+                current.getUserId(), company, position, status, source);
+
+        JobApplicationDto updated = jobApplicationService.updateJobApplication(updateJobApplicationRequest);
 
         ConsoleHelper.success("Job application updated: " + updated.getJobApplication().getPosition()
                 + " at " + updated.getCompany().getName());
@@ -108,7 +110,8 @@ public class JobApplicationController {
 
     public void handleDeleteJobApplication() {
         ConsoleHelper.printHeader("DELETE JOB APPLICATION");
-        int id = promptInt("Enter Job Application ID: ");
+        System.out.print("Enter Job Application ID: ");
+        String id = scanner.nextLine().trim();
         try {
             JobApplicationDto dto = jobApplicationService.getJobApplicationDetail(id);
             printJobApplication(dto);
@@ -195,24 +198,13 @@ public class JobApplicationController {
     private void printJobApplication(JobApplicationDto dto) {
         ConsoleHelper.printDivider();
         JobApplication jobApplication = dto.getJobApplication();
-        System.out.printf("  ID       : %d%n", jobApplication.getId());
+        System.out.printf("  ID       : %s%n", jobApplication.getId());
         System.out.printf("  Company  : %s%n", dto.getCompany().getName());
         System.out.printf("  Position : %s%n", jobApplication.getPosition());
         System.out.printf("  Status   : %s%n", formatStatusName(jobApplication.getStatus().name()));
         System.out.printf("  Source   : %s%n", jobApplication.getSource() != null ? jobApplication.getSource() : "-");
         System.out.printf("  Applied  : %s%n",
                 jobApplication.getAppliedDateTime() != null ? jobApplication.getAppliedDateTime() : "-");
-    }
-
-    private int promptInt(String prompt) {
-        while (true) {
-            System.out.print(prompt);
-            try {
-                return Integer.parseInt(scanner.nextLine().trim());
-            } catch (NumberFormatException e) {
-                ConsoleHelper.error("Invalid input. Please enter a number.");
-            }
-        }
     }
 
     private JobApplicationStatus updateStatus(JobApplicationStatus current) {

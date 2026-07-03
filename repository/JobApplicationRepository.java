@@ -6,13 +6,13 @@ import java.util.Optional;
 import model.JobApplication;
 
 public interface JobApplicationRepository {
-    Optional<JobApplication> findById(int id);
+    Optional<JobApplication> findById(String id);
 
     List<JobApplication> findAll();
 
-    List<JobApplication> findByUserId(int userId);
+    List<JobApplication> findByUserId(String userId);
 
     JobApplication save(JobApplication jobApplication);
 
-    void deleteById(int id);
+    void deleteById(String id);
 }

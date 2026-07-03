@@ -13,7 +13,7 @@ public class User extends BaseModel {
         this.password = password;
     }
 
-    public User(int id, String name, String password) {
+    public User(String id, String name, String password) {
         super(id);
         this.name = name;
         this.password = password;

@@ -3,7 +3,7 @@ package repository.inmemory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.UUID;
 
 import exception.HandleException;
 import model.Company;
@@ -11,12 +11,11 @@ import repository.CompanyRepository;
 
 public class CompanyRepositoryInMemoryImpl implements CompanyRepository {
 
-    private final AtomicInteger idCounter = new AtomicInteger(1);
     private final List<Company> companies = new ArrayList<>();
 
     @Override
-    public Optional<Company> findById(int id) {
-        return companies.stream().filter(company -> company.getId() == id).findFirst();
+    public Optional<Company> findById(String id) {
+        return companies.stream().filter(company -> company.getId().equals(id)).findFirst();
     }
 
     @Override
@@ -26,8 +25,8 @@ public class CompanyRepositoryInMemoryImpl implements CompanyRepository {
 
     @Override
     public Company save(Company company) {
-        if (company.getId() == 0) {
-            company.setId(idCounter.getAndIncrement());
+        if (company.getId() == null) {
+            company.setId(UUID.randomUUID().toString());
             companies.add(company);
             return company;
         } else {

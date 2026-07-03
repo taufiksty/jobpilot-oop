@@ -6,7 +6,7 @@ import model.Company;
 
 public interface CompanyRepository {
 
-    Optional<Company> findById(int id);
+    Optional<Company> findById(String id);
 
     Optional<Company> findByName(String name);
 

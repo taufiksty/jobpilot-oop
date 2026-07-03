@@ -5,8 +5,8 @@ import java.time.LocalDateTime;
 import enums.JobApplicationStatus;
 
 public class JobApplication extends BaseModel {
-    private int userId;
-    private int companyId;
+    private String userId;
+    private String companyId;
     private String position;
     private JobApplicationStatus status;
     private String jobUrl;
@@ -15,7 +15,7 @@ public class JobApplication extends BaseModel {
     private LocalDateTime importanDateTime;
     private String importantNote;
 
-    public JobApplication(int userId, int companyId, String position, JobApplicationStatus status,
+    public JobApplication(String userId, String companyId, String position, JobApplicationStatus status,
             String jobUrl, String source, LocalDateTime appliedDateTime,
             LocalDateTime importanDateTime, String importantNote) {
         super();
@@ -30,7 +30,7 @@ public class JobApplication extends BaseModel {
         this.importantNote = importantNote;
     }
 
-    public JobApplication(int id, int userId, int companyId, String position, JobApplicationStatus status,
+    public JobApplication(String id, String userId, String companyId, String position, JobApplicationStatus status,
             String jobUrl, String source, LocalDateTime appliedDateTime,
             LocalDateTime importanDateTime, String importantNote) {
         super(id);
@@ -45,6 +45,7 @@ public class JobApplication extends BaseModel {
         this.importantNote = importantNote;
     }
 
+    @Override
     public String toString() {
         return "JobApplication{id=" + getId() + ", userId=" + userId + ", companyId=" + companyId
                 + ", position='" + position + "', status=" + status + ", jobUrl='" + jobUrl
@@ -54,19 +55,19 @@ public class JobApplication extends BaseModel {
 
     // Getters and Setters
 
-    public int getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
-    public int getCompanyId() {
+    public String getCompanyId() {
         return companyId;
     }
 
-    public void setCompanyId(int companyId) {
+    public void setCompanyId(String companyId) {
         this.companyId = companyId;
     }
 

@@ -8,7 +8,7 @@ import model.User;
 public interface UserRepository {
     List<User> findAll();
 
-    Optional<User> findById(int id);
+    Optional<User> findById(String id);
 
     User save(User user);
 }

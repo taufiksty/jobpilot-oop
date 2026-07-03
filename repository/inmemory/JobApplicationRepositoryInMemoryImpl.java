@@ -3,7 +3,7 @@ package repository.inmemory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import exception.HandleException;
@@ -11,30 +11,29 @@ import model.JobApplication;
 import repository.JobApplicationRepository;
 
 public class JobApplicationRepositoryInMemoryImpl implements JobApplicationRepository {
-    private final AtomicInteger idCounter = new AtomicInteger(1);
     private final List<JobApplication> jobApplications = new ArrayList<>();
 
     @Override
-    public Optional<JobApplication> findById(int id) {
-        return jobApplications.stream().filter(jobApplication -> jobApplication.getId() == id).findFirst();
+    public Optional<JobApplication> findById(String id) {
+        return jobApplications.stream().filter(jobApplication -> jobApplication.getId().equals(id)).findFirst();
     }
 
     @Override
     public List<JobApplication> findAll() {
-        return jobApplications;
+        return new ArrayList<>(jobApplications);
     }
 
     @Override
-    public List<JobApplication> findByUserId(int userId) {
+    public List<JobApplication> findByUserId(String userId) {
         return jobApplications.stream()
-                .filter(jobApplication -> jobApplication.getUserId() == userId)
+                .filter(jobApplication -> jobApplication.getUserId().equals(userId))
                 .collect(Collectors.toList());
     }
 
     @Override
     public JobApplication save(JobApplication jobApplication) {
-        if (jobApplication.getId() == 0) {
-            jobApplication.setId(idCounter.getAndIncrement());
+        if (jobApplication.getId() == null) {
+            jobApplication.setId(UUID.randomUUID().toString());
             jobApplications.add(jobApplication);
             return jobApplication;
         } else {
@@ -64,7 +63,7 @@ public class JobApplicationRepositoryInMemoryImpl implements JobApplicationRepos
     }
 
     @Override
-    public void deleteById(int id) {
+    public void deleteById(String id) {
         JobApplication jobApplication = findById(id)
                 .orElseThrow(() -> new HandleException("JobApplication with id " + id + " does not exist."));
         jobApplications.remove(jobApplication);

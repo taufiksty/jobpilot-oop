@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 
 import dto.AuthUserDto;
+import dto.request.LoginRequestDto;
+import dto.request.RegisterRequestDto;
 import exception.HandleException;
 import model.User;
 import model.UserEmail;
@@ -21,21 +23,16 @@ public class AuthService {
         this.userEmailRepository = userEmailRepository;
     }
 
-    public User login(String email, String password) {
-        if (email == null || email.isBlank()) {
-            throw new HandleException("Email cannot be empty.");
-        }
-        if (password == null || password.isBlank()) {
-            throw new HandleException("Password cannot be empty.");
-        }
+    public User login(LoginRequestDto request) {
+        request.validate();
 
-        Optional<UserEmail> userEmailOpt = userEmailRepository.findByEmail(email);
+        Optional<UserEmail> userEmailOpt = userEmailRepository.findByEmail(request.getEmail());
         if (userEmailOpt.isEmpty()) {
             throw new HandleException("Invalid email or password.");
         }
 
         Optional<User> userOpt = userRepository.findById(userEmailOpt.get().getUserId());
-        if (userOpt.isEmpty() || !userOpt.get().getPassword().equals(password)) {
+        if (userOpt.isEmpty() || !userOpt.get().getPassword().equals(request.getPassword())) {
             throw new HandleException("Invalid email or password.");
         }
 
@@ -51,29 +48,18 @@ public class AuthService {
         return user;
     }
 
-    public User register(String name, String email, String password, String confirmPassword) {
-        if (name == null || name.isBlank()) {
-            throw new HandleException("Name cannot be empty.");
-        }
-        if (email == null || !email.matches("^[\\w.+\\-]+@[a-zA-Z0-9.\\-]+\\.[a-zA-Z]{2,}$")) {
-            throw new HandleException("Invalid email format.");
-        }
-        if (password == null || password.length() < 6) {
-            throw new HandleException("Password must be at least 6 characters long.");
-        }
-        if (!password.equals(confirmPassword)) {
-            throw new HandleException("Passwords do not match.");
-        }
+    public User register(RegisterRequestDto request) {
+        request.validate();
 
-        Optional<UserEmail> existingUserEmail = userEmailRepository.findByEmail(email);
+        Optional<UserEmail> existingUserEmail = userEmailRepository.findByEmail(request.getEmail());
         if (existingUserEmail.isPresent()) {
             throw new HandleException("Email is already registered.");
         }
 
-        User newUser = new User(name, password);
+        User newUser = new User(request.getName(), request.getPassword());
         userRepository.save(newUser);
 
-        UserEmail newUserEmail = new UserEmail(newUser.getId(), email, "local", "local");
+        UserEmail newUserEmail = new UserEmail(newUser.getId(), request.getEmail(), "local", "local");
         userEmailRepository.save(newUserEmail);
 
         return newUser;

@@ -8,7 +8,7 @@ public class Company extends BaseModel {
         this.name = name;
     }
 
-    public Company(int id, String name) {
+    public Company(String id, String name) {
         super(id);
         this.name = name;
     }

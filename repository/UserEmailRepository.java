@@ -6,7 +6,7 @@ import model.UserEmail;
 
 public interface UserEmailRepository {
 
-    Optional<UserEmail> findById(int id);
+    Optional<UserEmail> findById(String id);
 
     Optional<UserEmail> findByEmail(String email);
 

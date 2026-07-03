@@ -3,20 +3,20 @@ package model;
 import java.time.LocalDateTime;
 
 public abstract class BaseModel {
-    private int id;
+    private String id;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private LocalDateTime deletedAt;
-    private int createdBy;
-    private int updatedBy;
-    private int deletedBy;
+    private String createdBy;
+    private String updatedBy;
+    private String deletedBy;
 
     public BaseModel() {
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
 
-    public BaseModel(int id) {
+    public BaseModel(String id) {
         this.id = id;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
@@ -26,11 +26,11 @@ public abstract class BaseModel {
 
     // Getters and Setters
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -58,27 +58,27 @@ public abstract class BaseModel {
         this.deletedAt = deletedAt;
     }
 
-    public int getCreatedBy() {
+    public String getCreatedBy() {
         return createdBy;
     }
 
-    public void setCreatedBy(int createdBy) {
+    public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
     }
 
-    public int getUpdatedBy() {
+    public String getUpdatedBy() {
         return updatedBy;
     }
 
-    public void setUpdatedBy(int updatedBy) {
+    public void setUpdatedBy(String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
-    public int getDeletedBy() {
+    public String getDeletedBy() {
         return deletedBy;
     }
 
-    public void setDeletedBy(int deletedBy) {
+    public void setDeletedBy(String deletedBy) {
         this.deletedBy = deletedBy;
     }
 }

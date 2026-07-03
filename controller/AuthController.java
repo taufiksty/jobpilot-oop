@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Scanner;
 
 import dto.AuthUserDto;
+import dto.request.LoginRequestDto;
+import dto.request.RegisterRequestDto;
 import model.User;
 import model.UserEmail;
 import service.AuthService;
@@ -30,7 +32,9 @@ public class AuthController {
         System.out.print("Confirm Password  : ");
         String confirmPassword = scanner.nextLine().trim();
 
-        User user = authService.register(name, email, password, confirmPassword);
+        RegisterRequestDto registerRequest = new RegisterRequestDto(name, email, password, confirmPassword);
+
+        User user = authService.register(registerRequest);
         ConsoleHelper.success("Registration successful for " + user.getName() + "! Please log in.");
     }
 
@@ -41,7 +45,9 @@ public class AuthController {
         System.out.print("Password  : ");
         String password = scanner.nextLine().trim();
 
-        User user = authService.login(email, password);
+        LoginRequestDto loginRequest = new LoginRequestDto(email, password);
+
+        User user = authService.login(loginRequest);
         ConsoleHelper.success("Login successful! Welcome, " + user.getName() + ".");
     }
 
@@ -52,7 +58,7 @@ public class AuthController {
         User user = currentUser.getUser();
         List<UserEmail> emails = currentUser.getUserEmails();
 
-        System.out.printf("  ID         : %d%n", user.getId());
+        System.out.printf("  ID         : %s%n", user.getId());
         System.out.printf("  Name       : %s%n", user.getName());
         System.out.printf("  Created At : %s%n", user.getCreatedAt());
         System.out.printf("  Last Login : %s%n", user.getLastLoginAt());

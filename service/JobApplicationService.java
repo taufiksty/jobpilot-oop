@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import dto.JobApplicationDto;
+import dto.request.AddJobApplicationRequestDto;
+import dto.request.UpdateJobApplicationRequestDto;
 import enums.JobApplicationStatus;
 import exception.HandleException;
 import model.Company;
@@ -23,19 +25,17 @@ public class JobApplicationService {
         this.companyRepository = companyRepository;
     }
 
-    public JobApplicationDto addJobApplication(int userId, String companyName, String position,
-            JobApplicationStatus status,
-            String source) {
-        Company company = findOrCreateCompany(companyName);
+    public JobApplicationDto addJobApplication(AddJobApplicationRequestDto request) {
+        Company company = findOrCreateCompany(request.getCompanyName());
 
         JobApplication jobApplication = new JobApplication(
-                userId,
+                request.getUserId(),
                 company.getId(),
-                position,
-                status,
+                request.getPosition(),
+                request.getStatus(),
                 null, // jobUrl
-                source,
-                status.equals(JobApplicationStatus.APPLIED) ? LocalDateTime.now() : null, // appliedDateTime
+                request.getSource(),
+                request.getStatus().equals(JobApplicationStatus.APPLIED) ? LocalDateTime.now() : null, // appliedDateTime
                 null, // importanDateTime
                 null // importantNote
         );
@@ -44,36 +44,35 @@ public class JobApplicationService {
         return toDto(saved);
     }
 
-    public List<JobApplicationDto> getMyJobApplications(int userId) {
+    public List<JobApplicationDto> getMyJobApplications(String userId) {
         return jobApplicationRepository.findByUserId(userId).stream()
                 .map(this::toDto)
                 .collect(Collectors.toList());
     }
 
-    public JobApplicationDto getJobApplicationDetail(int id) {
+    public JobApplicationDto getJobApplicationDetail(String id) {
         JobApplication jobApplication = jobApplicationRepository.findById(id)
                 .orElseThrow(() -> new HandleException("Job application with id " + id + " not found."));
         return toDto(jobApplication);
     }
 
-    public JobApplicationDto updateJobApplication(int id, int userId, String companyName, String position,
-            JobApplicationStatus status, String source) {
-        JobApplication existing = jobApplicationRepository.findById(id)
-                .orElseThrow(() -> new HandleException("Job application with id " + id + " not found."));
+    public JobApplicationDto updateJobApplication(UpdateJobApplicationRequestDto request) {
+        JobApplication existing = jobApplicationRepository.findById(request.getId())
+                .orElseThrow(() -> new HandleException("Job application with id " + request.getId() + " not found."));
 
-        Company company = findOrCreateCompany(companyName);
+        Company company = findOrCreateCompany(request.getCompanyName());
 
-        existing.setUserId(userId);
+        existing.setUserId(request.getUserId());
         existing.setCompanyId(company.getId());
-        existing.setPosition(position);
-        existing.setStatus(status);
-        existing.setSource(source);
+        existing.setPosition(request.getPosition());
+        existing.setStatus(request.getStatus());
+        existing.setSource(request.getSource());
 
         JobApplication updated = jobApplicationRepository.save(existing);
         return toDto(updated);
     }
 
-    public void deleteJobApplication(int id) {
+    public void deleteJobApplication(String id) {
         jobApplicationRepository.deleteById(id);
     }
 

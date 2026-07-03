@@ -1,12 +1,12 @@
 package model;
 
 public class UserEmail extends BaseModel {
-    private int userId;
+    private String userId;
     private String email;
     private String providerId;
     private String providerName;
 
-    public UserEmail(int userId, String email, String providerId, String providerName) {
+    public UserEmail(String userId, String email, String providerId, String providerName) {
         super();
         this.userId = userId;
         this.email = email;
@@ -14,7 +14,7 @@ public class UserEmail extends BaseModel {
         this.providerName = providerName;
     }
 
-    public UserEmail(int id, int userId, String email, String providerId, String providerName) {
+    public UserEmail(String id, String userId, String email, String providerId, String providerName) {
         super(id);
         this.userId = userId;
         this.email = email;
@@ -28,11 +28,11 @@ public class UserEmail extends BaseModel {
     }
 
     // Getters and Setters
-    public int getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 

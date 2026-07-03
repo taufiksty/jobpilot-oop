@@ -3,22 +3,21 @@ package repository.inmemory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.UUID;
 
 import exception.HandleException;
 import model.UserEmail;
 import repository.UserEmailRepository;
 
 public class UserEmailRepositoryInMemoryImpl implements UserEmailRepository {
-    private final AtomicInteger idCounter = new AtomicInteger(2);
     private final List<UserEmail> userEmails = new ArrayList<>(
             List.of(
-                    new UserEmail(1, 1, "taufik@gmail.com", null, "local")));
+                    new UserEmail("email-001", "user-001", "taufik@gmail.com", null, "local")));
 
     @Override
-    public Optional<UserEmail> findById(int id) {
+    public Optional<UserEmail> findById(String id) {
         return userEmails.stream()
-                .filter(userEmail -> userEmail.getId() == id)
+                .filter(userEmail -> userEmail.getId().equals(id))
                 .findFirst();
     }
 
@@ -32,8 +31,8 @@ public class UserEmailRepositoryInMemoryImpl implements UserEmailRepository {
 
     @Override
     public UserEmail save(UserEmail userEmail) {
-        if (userEmail.getId() == 0) {
-            userEmail.setId(idCounter.getAndIncrement());
+        if (userEmail.getId() == null) {
+            userEmail.setId(UUID.randomUUID().toString());
             userEmails.add(userEmail);
             return userEmail;
         } else {
