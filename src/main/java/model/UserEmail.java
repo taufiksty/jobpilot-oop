@@ -6,6 +6,10 @@ public class UserEmail extends BaseModel {
     private String providerId;
     private String providerName;
 
+    public UserEmail() {
+        super();
+    }
+
     public UserEmail(String userId, String email, String providerId, String providerName) {
         super();
         this.userId = userId;

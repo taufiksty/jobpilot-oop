@@ -3,6 +3,10 @@ package model;
 public class Company extends BaseModel {
     private String name;
 
+    public Company() {
+        super();
+    }
+
     public Company(String name) {
         super();
         this.name = name;

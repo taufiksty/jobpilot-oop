@@ -7,6 +7,10 @@ public class User extends BaseModel {
     private String password;
     private LocalDateTime lastLoginAt;
 
+    public User() {
+        super();
+    }
+
     public User(String name, String password) {
         super();
         this.name = name;

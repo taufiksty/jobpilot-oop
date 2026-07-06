@@ -15,6 +15,10 @@ public class JobApplication extends BaseModel {
     private LocalDateTime importanDateTime;
     private String importantNote;
 
+    public JobApplication() {
+        super();
+    }
+
     public JobApplication(String userId, String companyId, String position, JobApplicationStatus status,
             String jobUrl, String source, LocalDateTime appliedDateTime,
             LocalDateTime importanDateTime, String importantNote) {

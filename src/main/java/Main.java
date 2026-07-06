@@ -1,15 +1,18 @@
 import java.util.Scanner;
 
+import javax.sql.DataSource;
+
+import config.HikariDataSourceProvider;
 import controller.AuthController;
 import controller.JobApplicationController;
 import repository.CompanyRepository;
 import repository.JobApplicationRepository;
 import repository.UserEmailRepository;
 import repository.UserRepository;
-import repository.inmemory.CompanyRepositoryInMemoryImpl;
-import repository.inmemory.JobApplicationRepositoryInMemoryImpl;
-import repository.inmemory.UserEmailRepositoryInMemoryImpl;
-import repository.inmemory.UserRepositoryInMemoryImpl;
+import repository.mysql.CompanyRepositoryMysqlImpl;
+import repository.mysql.JobApplicationRepositoryMysqlImpl;
+import repository.mysql.UserEmailRepositoryMysqlImpl;
+import repository.mysql.UserRepositoryMysqlImpl;
 import service.AuthService;
 import service.JobApplicationService;
 import util.helper.ConsoleHelper;
@@ -19,11 +22,13 @@ import util.security.SessionContext;
 public class Main {
 
     private static final Scanner scanner = new Scanner(System.in);
+    private static final DataSource dataSource = HikariDataSourceProvider.geDataSource();
 
-    private static final UserRepository userRepository = new UserRepositoryInMemoryImpl();
-    private static final UserEmailRepository userEmailRepository = new UserEmailRepositoryInMemoryImpl();
-    private static final CompanyRepository companyRepository = new CompanyRepositoryInMemoryImpl();
-    private static final JobApplicationRepository jobApplicationRepository = new JobApplicationRepositoryInMemoryImpl();
+    private static final UserRepository userRepository = new UserRepositoryMysqlImpl(dataSource);
+    private static final UserEmailRepository userEmailRepository = new UserEmailRepositoryMysqlImpl(dataSource);
+    private static final CompanyRepository companyRepository = new CompanyRepositoryMysqlImpl(dataSource);
+    private static final JobApplicationRepository jobApplicationRepository = new JobApplicationRepositoryMysqlImpl(
+            dataSource);
 
     private static final AuthService authService = new AuthService(userRepository, userEmailRepository);
     private static final JobApplicationService jobApplicationService = new JobApplicationService(
